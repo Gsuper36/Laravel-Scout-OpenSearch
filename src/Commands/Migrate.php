@@ -42,6 +42,8 @@ class Migrate extends Command
             return;
         }
 
+        $latest = $latest['index'];
+
         $opensearch->reindex([
             'body' => [
                 'source' => [
