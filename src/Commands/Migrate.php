@@ -20,7 +20,7 @@ class Migrate extends Command
         Client $opensearch, 
         OpenSearchEngine $scout
     ) {
-        $model = $this->argument("models");
+        $model = $this->argument("model");
 
         $alias     = (new $model)->searchableAs();
         $indexName = sprintf("%s_%s", self::INDEX_PREFIX, time());
