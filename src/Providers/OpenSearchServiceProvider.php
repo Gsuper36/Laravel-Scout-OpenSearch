@@ -2,6 +2,7 @@
 
 namespace CloudMediaSolutions\LaravelScoutOpenSearch\Providers;
 
+use CloudMediaSolutions\LaravelScoutOpenSearch\Commands\Migrate;
 use CloudMediaSolutions\LaravelScoutOpenSearch\Engines\OpenSearchEngine;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\ServiceProvider;
@@ -50,5 +51,11 @@ class OpenSearchServiceProvider extends ServiceProvider
 
             return $this;
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Migrate::class
+            ]);
+        }
     }
 }
