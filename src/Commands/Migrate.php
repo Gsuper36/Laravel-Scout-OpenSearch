@@ -15,24 +15,19 @@ class Migrate extends Command
 
     protected $description = "Zero downtime migrations for Opensearch";
 
-    public function __construct(
-        private Client $opensearch,
-        private OpenSearchEngine $scoutEngine
+    public function handle(
+        Client $opensearch, 
+        OpenSearchEngine $scout
     ) {
-
-    }
-
-    public function handle()
-    {
         $alias     = (new $model)->searchableAs();
         $indexName = sprintf("%s_%s", self::INDEX_PREFIX, time());
 
-        $this->scoutEngine->createIndex(
+        $scout->createIndex(
             $indexName,
             ["aliases" => [$alias => new stdClass]]
         );
 
-        $indexes = $this->opensearch->cat()->aliases(["name" => $alias, "format" => "json"]);
+        $indexes = $opensearch->cat()->aliases(["name" => $alias, "format" => "json"]);
 
         dd($indexes);
 
