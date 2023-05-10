@@ -32,7 +32,30 @@ class Migrate extends Command
 
         $indexes = $opensearch->cat()->aliases(["name" => $alias, "format" => "json"]);
 
-        dd($indexes);
+        $indexes = array_filter($indexes, function (array $index) use ($indexName) {
+            return $index["index"] !== $indexName;
+        });
+
+        $latest = array_pop($indexes);
+
+        if (empty($latest)) {
+            return;
+        }
+
+        $opensearch->reindex([
+            'body' => [
+                'source' => [
+                    'index' => $latest
+                ],
+                'dest' => [
+                    'index' => $indexName
+                ]
+            ]
+        ]);
+
+        $opensearch->indices()->deleteAlias(['index' => $latest, 'name' => $alias]);
+
+        $this->info("Index {$latest} can be deleted");
 
         /*
             Тут ищем более поздний индекс по time()
