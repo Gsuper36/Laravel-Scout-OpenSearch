@@ -23,7 +23,7 @@ class Migrate extends Command
         $model = $this->argument("model");
 
         $alias     = (new $model)->searchableAs();
-        $indexName = sprintf("%s_%s", self::INDEX_PREFIX, time());
+        $indexName = sprintf("%s_%s_%s", self::INDEX_PREFIX, $alias, time());
 
         $scout->createIndex(
             $indexName,

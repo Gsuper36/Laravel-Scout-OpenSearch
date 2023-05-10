@@ -212,7 +212,10 @@ class OpenSearchEngine extends Engine
             config('opensearch.indices.default') ?? [],
             config('opensearch.indices.'.$name) ?? []);
 
-        return $this->opensearch->indices()->create(['index' => $name, 'body' => $body]);
+        return $this->opensearch->indices()->create([
+            'index' => $name, 
+            'body' => array_merge($body, $options)
+        ]);
     }
 
     /**
