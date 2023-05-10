@@ -11,7 +11,8 @@ class Migrate extends Command
 {
     private const INDEX_PREFIX = "scout";
 
-    protected $signature = "opensearch:migrate";
+    protected $signature = "opensearch:migrate
+                            {model : Class name of model}";
 
     protected $description = "Zero downtime migrations for Opensearch";
 
@@ -19,6 +20,8 @@ class Migrate extends Command
         Client $opensearch, 
         OpenSearchEngine $scout
     ) {
+        $model = $this->argument("models");
+
         $alias     = (new $model)->searchableAs();
         $indexName = sprintf("%s_%s", self::INDEX_PREFIX, time());
 
