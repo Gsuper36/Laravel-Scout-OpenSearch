@@ -9,7 +9,6 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Scout\Builder;
 use Laravel\Scout\EngineManager;
 use OpenSearch\Client;
-use OpenSearch\ClientBuilder;
 use OpenSearchDSL\Sort\FieldSort;
 
 class OpenSearchServiceProvider extends ServiceProvider
@@ -23,8 +22,11 @@ class OpenSearchServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../../config/opensearch.php' => config_path('opensearch.php'),
-            __DIR__.'OpenSearchClientServiceProvider.php' => app_path("Providers/OpenSearchClientServiceProvider.php")
         ], 'opensearch-config');
+
+        $this->publishes([
+            __DIR__.'OpenSearchClientServiceProvider.php' => app_path("Providers/OpenSearchClientServiceProvider.php")
+        ], 'opensearch-client-provider');
 
         $this->app->make(EngineManager::class)->extend(OpenSearchEngine::class, function (Application $app) {
             $opensearch = $app->make(Client::class);
