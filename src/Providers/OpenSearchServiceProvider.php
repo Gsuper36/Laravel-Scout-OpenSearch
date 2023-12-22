@@ -23,16 +23,13 @@ class OpenSearchServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../../config/opensearch.php' => config_path('opensearch.php'),
+            OpenSearchClientServiceProvider::class => app_path("Providers/OpenSearchClientServiceProvider.php")
         ], 'opensearch-config');
 
         $this->app->make(EngineManager::class)->extend(OpenSearchEngine::class, function (Application $app) {
             $opensearch = $app->make(Client::class);
 
             return new OpenSearchEngine($opensearch);
-        });
-
-        $this->app->singleton(Client::class, function () {
-            return ClientBuilder::fromConfig(config('opensearch.client'));
         });
 
         Builder::macro('cursorPaginate', function (int $perPage = null, string $cursorName = 'cursor', $cursor = null): CursorPaginator {
