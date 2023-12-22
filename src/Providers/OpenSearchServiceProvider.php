@@ -25,7 +25,7 @@ class OpenSearchServiceProvider extends ServiceProvider
         ], 'opensearch-config');
 
         $this->publishes([
-            __DIR__.'OpenSearchClientServiceProvider.php' => app_path("Providers/OpenSearchClientServiceProvider.php")
+            __DIR__.'/OpenSearchClientServiceProvider.php' => app_path("Providers/OpenSearchClientServiceProvider.php")
         ], 'opensearch-client-provider');
 
         $this->app->make(EngineManager::class)->extend(OpenSearchEngine::class, function (Application $app) {
